@@ -28,10 +28,8 @@ class DataProcessor:
         """Saves processed data."""
         self.data.to_csv(filepath)
 
-    def merge(self, newdata, how: str, left_on: str, right_on: str):
-        self.data = pd.merge(
-            self.data, newdata.data, how=how, left_on=left_on, right_on=right_on
-        )
+    def merge(self, newdata, *args, **kwargs):
+        self.data = pd.merge(self.data, newdata.data, *args, **kwargs)
 
 
 class FeatureSelector:
@@ -52,7 +50,7 @@ def merge_one_airport(flights, airports, location: str):
     OLDCOLS = ["AIRPORT", "CITY", "STATE", "LATITUDE", "LONGITUDE"]
     NEWCOLS = [old + "_" + location for old in OLDCOLS]
     flights.merge(
-        airports, how="inner", left_on=location + "_AIRPORT", right_on="IATA_CODE"
+        airports, how="left", left_on=location + "_AIRPORT", right_on="IATA_CODE"
     )
     flights.drop_columns(DROPCOLS)
     flights.rename_columns(OLDCOLS, NEWCOLS)
@@ -69,4 +67,7 @@ if __name__ == "__main__":
     flights = DataProcessor("flights.csv", 100, dtype=coltypes)
     airports = DataProcessor("airports.csv")
     merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
+    holidays = DataProcessor("2015_Public_Holidays.csv")
+    # flights.merge(holidays, how="left", on=["MONTH", "DAY"])
     print(flights.get_columns())
+    print(len(flights.get_columns()))
