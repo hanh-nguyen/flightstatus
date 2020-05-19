@@ -15,6 +15,10 @@ class DataProcessor:
     def get_data(self):
         return self.data
 
+    def save_csv(self, filepath: str):
+        """Saves processed data."""
+        self.data.to_csv(filepath)
+
     def get_columns(self):
         return self.data.columns
 
@@ -24,12 +28,11 @@ class DataProcessor:
     def drop_columns(self, colnames: list):
         self.data = self.data.drop(colnames, axis=1)
 
-    def save_csv(self, filepath: str):
-        """Saves processed data."""
-        self.data.to_csv(filepath)
-
     def merge(self, newdata, *args, **kwargs):
         self.data = pd.merge(self.data, newdata.data, *args, **kwargs)
+
+    def create_target(self, condition):
+        self.target = self.data[condition]
 
 
 class FeatureSelector:
@@ -66,8 +69,11 @@ if __name__ == "__main__":
     coltypes = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
     flights = DataProcessor("flights.csv", 100, dtype=coltypes)
     airports = DataProcessor("airports.csv")
-    merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
     holidays = DataProcessor("2015_Public_Holidays.csv")
-    # flights.merge(holidays, how="left", on=["MONTH", "DAY"])
+    # add new variables based on departure and arrival airports
+    # TODO: write pytest to check if any airport can't be matched
+    merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
+    # add holiday days
+    flights.merge(holidays, how="left", on=["MONTH", "DAY"])
     print(flights.get_columns())
     print(len(flights.get_columns()))
