@@ -30,9 +30,14 @@ class DataProcessor:
         """Saves processed data."""
         self.data.to_csv(filepath)
 
-    def merge(self, newdata, how: str, left_on: str, right_on: str):
+    def merge(self, newdata, how: str, left_on: str, right_on: str, suffixes: tuple):
         self.data = pd.merge(
-            self.data, newdata.data, how=how, left_on=left_on, right_on=right_on
+            self.data,
+            newdata.data,
+            how=how,
+            left_on=left_on,
+            right_on=right_on,
+            suffixes=suffixes,
         )
 
 
@@ -49,9 +54,27 @@ class FeatureSelector:
         self.columns = newcols
 
 
+def merge_one_airport(flights, airports, location: str):
+    DROPCOLS = ["IATA_CODE", "COUNTRY"]
+    flights.merge(
+        airports,
+        how="inner",
+        left_on=location + "_AIRPORT",
+        right_on="IATA_CODE",
+        suffixes=("", "_" + location),
+    )
+    flights.drop_columns(DROPCOLS)
+    return flights
+
+
+def merge_two_airports(flights, airports, locations: list):
+    for location in locations:
+        flights = merge_one_airport(flights, airports, location)
+
+
 if __name__ == "__main__":
     coltypes = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
     flights = DataProcessor("flights.csv", 100, dtype=coltypes)
     airports = DataProcessor("airports.csv")
-    flights.merge(airports, how="inner", left_on="ORIGIN_AIRPORT", right_on="IATA_CODE")
+    merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
     print(flights.get_columns())
