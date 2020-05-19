@@ -18,10 +18,8 @@ class DataProcessor:
     def get_columns(self):
         return self.data.columns
 
-    def rename_column(self, old_colname: str, new_colname: str):
-        """How to rename multiple columns?
-        """
-        self.data = self.data.rename(columns={old_colname: new_colname})
+    def rename_columns(self, old_cols: list, new_cols: list):
+        self.data = self.data.rename(columns=dict(zip(old_cols, new_cols)))
 
     def drop_columns(self, colnames: list):
         self.data = self.data.drop(colnames, axis=1)
@@ -30,14 +28,9 @@ class DataProcessor:
         """Saves processed data."""
         self.data.to_csv(filepath)
 
-    def merge(self, newdata, how: str, left_on: str, right_on: str, suffixes: tuple):
+    def merge(self, newdata, how: str, left_on: str, right_on: str):
         self.data = pd.merge(
-            self.data,
-            newdata.data,
-            how=how,
-            left_on=left_on,
-            right_on=right_on,
-            suffixes=suffixes,
+            self.data, newdata.data, how=how, left_on=left_on, right_on=right_on
         )
 
 
@@ -56,14 +49,13 @@ class FeatureSelector:
 
 def merge_one_airport(flights, airports, location: str):
     DROPCOLS = ["IATA_CODE", "COUNTRY"]
+    OLDCOLS = ["AIRPORT", "CITY", "STATE", "LATITUDE", "LONGITUDE"]
+    NEWCOLS = [old + "_" + location for old in OLDCOLS]
     flights.merge(
-        airports,
-        how="inner",
-        left_on=location + "_AIRPORT",
-        right_on="IATA_CODE",
-        suffixes=("", "_" + location),
+        airports, how="inner", left_on=location + "_AIRPORT", right_on="IATA_CODE"
     )
     flights.drop_columns(DROPCOLS)
+    flights.rename_columns(OLDCOLS, NEWCOLS)
     return flights
 
 
