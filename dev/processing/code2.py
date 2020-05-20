@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 class DataProcessor:
     """Base processor to be used for all preparation.
     """
@@ -65,15 +64,4 @@ def merge_two_airports(flights, airports, locations: list):
         flights = merge_one_airport(flights, airports, location)
 
 
-if __name__ == "__main__":
-    coltypes = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
-    flights = DataProcessor("flights.csv", 100, dtype=coltypes)
-    airports = DataProcessor("airports.csv")
-    holidays = DataProcessor("2015_Public_Holidays.csv")
-    # add new variables based on departure and arrival airports
-    # TODO: write pytest to check if any airport can't be matched
-    merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
-    # add holiday days
-    flights.merge(holidays, how="left", on=["MONTH", "DAY"])
-    print(flights.get_columns())
-    print(len(flights.get_columns()))
+
