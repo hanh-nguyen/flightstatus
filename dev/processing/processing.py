@@ -30,9 +30,9 @@ def is_internationl(col):
     return ('Inter' in col)*1
 
 
-def aggregate(data, col):
-    return data[col].value_counts()
-
-
 def join_aggregates(data, col, aggregates, agg_name):
     return pd.merge(data, aggregates.to_frame(name=agg_name), how='left', left_on=col, right_index=True)
+
+
+def define_target(data, col, threshold):
+    return (data[col] > threshold | data[col].isnull())*1
