@@ -26,8 +26,8 @@ def categorize_multiple(data, features: list):
     return data
 
 
-def is_internationl(col):
-    return ('Inter' in col)*1
+def is_international(col):
+    return ('INTER' in col.upper())*1
 
 
 def join_aggregates(data, col, aggregates, agg_name):

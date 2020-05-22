@@ -1,5 +1,5 @@
 import pandas as pd
-from processing import *
+from datapreparation import *
 
 COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
 CAT_FEATURES = ['AIRLINE', 'ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
@@ -41,7 +41,7 @@ airport_size = flights[AIRPORTS[0]].value_counts(
 
 for airport in AIRPORTS:
     airport_intl = airport+"_INTL"
-    flights[airport_intl] = flights[airport].apply(is_internationl)
+    flights[airport_intl] = flights[airport].apply(is_international)
     flights = join_aggregates(
         flights, airport, airport_size, airport+"_TRAFFIC")
 
