@@ -1,2 +1,4 @@
 *.csv
 .vscode/settings.json
+test/datapreparation/__pycache__
+dev/datapreparation/__pycache__
