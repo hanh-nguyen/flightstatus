@@ -10,22 +10,21 @@ flights = pd.read_csv("./data/raw/flights.csv", nrows=100, dtype=COLTYPES)
 airports = pd.read_csv("./data/raw/airports.csv")
 holidays = pd.read_csv("./data/raw/2015_Public_Holidays.csv")
 
-"""Merge data files
-TODO: 
-write pytest to check if any airport can't be matched (missing in city, state, ...)
-check if the # columns & rows are expected
-"""
+# Merge data files
+# TODO:
+# write pytest to check if any airport can't be matched (missing in city, state, ...)
+# check if the # columns & rows are expected
+
 flights = merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
 flights = flights.merge(holidays, how="left", on=["MONTH", "DAY"])
 
-"""Define target
-"""
+# Define target
 flights['TARGET'] = define_target(flights, 'DEPARTURE_DELAY', 30)
 
-"""Create new features
-- flags for holiday, weekend, international airport
-- traffic estimate based on flight counts for date, month, airport, airline
-"""
+# Create new features
+# - flags for holiday, weekend, international airport
+# - traffic estimate based on flight counts for date, month, airport, airline
+
 flights = categorize_multiple(flights, CAT_FEATURES)
 flights['HOLIDAY_FLAG'] = flights['HOLIDAY'].notnull()*1
 flights['WEEKEND'] = (flights['DAY_OF_WEEK'].isin([6, 7]))*1
