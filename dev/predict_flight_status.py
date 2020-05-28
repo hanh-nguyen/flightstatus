@@ -9,9 +9,9 @@ CAT_FEATURES = ['AIRLINE', 'ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
 AIRPORTS = ['ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
 COORDINATES = ['LONGITUDE', 'LATITUDE']
 
-flights = pd.read_csv("./data/raw/flights.csv", nrows=100, dtype=COLTYPES)
-airports = pd.read_csv("./data/raw/airports.csv")
-holidays = pd.read_csv("./data/raw/2015_Public_Holidays.csv")
+flights = pd.read_csv("./data/dev/flights.csv", nrows=100, dtype=COLTYPES)
+airports = pd.read_csv("./data/dev/airports.csv")
+holidays = pd.read_csv("./data/dev/2015_Public_Holidays.csv")
 
 # Merge data files
 flights = merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
