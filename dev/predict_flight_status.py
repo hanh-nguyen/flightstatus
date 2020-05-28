@@ -1,5 +1,8 @@
 import pandas as pd
 from datapreparation import *
+import os
+
+os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
 CAT_FEATURES = ['AIRLINE', 'ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
@@ -11,19 +14,15 @@ airports = pd.read_csv("./data/raw/airports.csv")
 holidays = pd.read_csv("./data/raw/2015_Public_Holidays.csv")
 
 # Merge data files
-# TODO:
-# write pytest to check if any airport can't be matched (missing in city, state, ...)
-# check if the # columns & rows are expected
-
 flights = merge_two_airports(flights, airports, ["ORIGIN", "DESTINATION"])
 flights = flights.merge(holidays, how="left", on=["MONTH", "DAY"])
 
 # Define target
-flights['TARGET'] = define_target(flights, 'DEPARTURE_DELAY', 30)
+flights['TARGET'] = define_target(flights, 'DEPARTURE_DELAY', 15)
 
 # Create new features
-# - flags for holiday, weekend, international airport
-# - traffic estimate based on flight counts for date, month, airport, airline
+# flags for holiday, weekend, international airport
+# traffic estimate based on flight counts for date, month, airport, airline
 
 flights = categorize_multiple(flights, CAT_FEATURES)
 flights['HOLIDAY_FLAG'] = flights['HOLIDAY'].notnull()*1
@@ -48,5 +47,5 @@ for coordinate in COORDINATES:
     flights[coordinate+"_DIF"] = flights[coordinate +
                                          '_ORIGIN'] - flights[coordinate+'_DESTINATION']
 
-print(flights.columns)
+# print(flights.columns)
 print(flights.shape)
