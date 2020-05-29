@@ -7,9 +7,10 @@ os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
 CAT_FEATURES = ['AIRLINE', 'ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
 AIRPORTS = ['ORIGIN_AIRPORT', 'DESTINATION_AIRPORT']
+AIRPORT_NAMES = ['AIRPORT_ORIGIN', 'AIRPORT_DESTINATION']
 COORDINATES = ['LONGITUDE', 'LATITUDE']
 
-flights = pd.read_csv("./data/dev/flights.csv", nrows=100, dtype=COLTYPES)
+flights = pd.read_csv("./data/dev/flights.csv", dtype=COLTYPES)
 airports = pd.read_csv("./data/dev/airports.csv")
 holidays = pd.read_csv("./data/dev/2015_Public_Holidays.csv")
 
@@ -38,14 +39,16 @@ airport_size = flights[AIRPORTS[0]].value_counts(
 ) + flights[AIRPORTS[1]].value_counts()
 
 for airport in AIRPORTS:
-    airport_intl = airport+"_INTL"
-    flights[airport_intl] = flights[airport].apply(is_international)
     flights = join_aggregates(
         flights, airport, airport_size, airport+"_TRAFFIC")
+
+for airport in AIRPORT_NAMES:
+    airport_intl = airport+"_INTL"
+    flights[airport_intl] = flights[airport].apply(is_international)
 
 for coordinate in COORDINATES:
     flights[coordinate+"_DIF"] = flights[coordinate +
                                          '_ORIGIN'] - flights[coordinate+'_DESTINATION']
 
 # print(flights.columns)
-print(flights.shape)
+flights.to_csv("./data/dev/flights_processed.csv", index=False)
