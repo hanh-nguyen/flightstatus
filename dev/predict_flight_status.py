@@ -17,12 +17,21 @@ UNAVAILABLE = ['ARRIVAL_TIME', 'ARRIVAL_DELAY', 'DIVERTED', 'CANCELLED', 'CANCEL
 DUP_COLS = ['AIRPORT_ORIGIN', 'AIRPORT_DESTINATION']
 EXTRA = ['DATE']
 flights = pd.read_csv("./data/dev/flights.csv", dtype=COLTYPES)
+# remove ineligible airport codes
 for airport in AIRPORTS:
     flights = flights[flights[airport].str.isalpha()]
+
+# remove 6 rows whose schedule time is missing
+flights.dropna(subset=['SCHEDULED_TIME'], inplace=True)
 
 airports = pd.read_csv("./data/dev/airports.csv")
 airports.loc[airports.IATA_CODE == 'PBG', 'LATITUDE'] = 44.6521
 airports.loc[airports.IATA_CODE == 'PBG', 'LONGITUDE'] = -73.4679
+airports.loc[airports.IATA_CODE == 'ECP', 'LATITUDE'] = 30.3549
+airports.loc[airports.IATA_CODE == 'ECP', 'LONGITUDE'] = -85.7995
+airports.loc[airports.IATA_CODE == 'UST', 'LATITUDE'] = 29.9544
+airports.loc[airports.IATA_CODE == 'UST', 'LONGITUDE'] = -81.3429
+
 holidays = pd.read_csv("./data/dev/2015_Public_Holidays.csv")
 
 # Merge data files
@@ -67,13 +76,13 @@ STR_VAR = [v for v in flights.columns if is_string_dtype(flights[v])]
 flights = categorize_multiple(flights, STR_VAR)
 flights.drop(STR_VAR, axis=1, inplace=True)
 
-# NULL_VAR = get_col_with_null(flights)
-# NUM_VAR_COMPLETE = [v for v in flights.columns if is_numeric_dtype(
-#     flights[v]) and v not in [NULL_VAR]]
-# selector = VarianceThreshold()
-# selector.fit(flights[NUM_VAR_COMPLETE])
-# NUM_VAR_REMOVED = [NUM_VAR_COMPLETE[i] for i in range(
-#     len(NUM_VAR_COMPLETE)) if selector.get_support()[i] == False]
-# flights.drop(NUM_VAR_REMOVED, axis=1, inplace=True)
+NULL_VAR = get_col_with_null(flights)
+NUM_VAR_COMPLETE = [v for v in flights.columns if is_numeric_dtype(
+    flights[v]) and v not in NULL_VAR]
+selector = VarianceThreshold()
+selector.fit(flights[NUM_VAR_COMPLETE])
+NUM_VAR_REMOVED = [NUM_VAR_COMPLETE[i] for i in range(
+    len(NUM_VAR_COMPLETE)) if selector.get_support()[i] == False]
+flights.drop(NUM_VAR_REMOVED, axis=1, inplace=True)
 
 flights.to_csv("./data/dev/flights_processed.csv", index=False)
