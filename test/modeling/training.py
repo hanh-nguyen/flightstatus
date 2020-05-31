@@ -1,3 +1,6 @@
+import pandas as pd
+
+
 def search_result(searchcv):
     result = pd.DataFrame.from_dict(searchcv.cv_results_['params'])
     result['mean_score'] = searchcv.cv_results_['mean_test_score']
