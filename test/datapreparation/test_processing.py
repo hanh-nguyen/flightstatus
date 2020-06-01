@@ -10,9 +10,6 @@ COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
 class TestMergeAirport:
     @classmethod
     def setup_class(cls):
-        """ setup any state specific to the execution of the given class (which
-        usually contains tests).
-        """
         cls.raw_data = pd.read_csv("./data/dev/flights.csv",
                                    nrows=100, dtype=COLTYPES)
         cls.airports = pd.read_csv("./data/dev/airports.csv")
