@@ -53,4 +53,3 @@ class TestIsInternational:
 
     def test_without_international(self):
         assert is_international("abc") == 0
-
