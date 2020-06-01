@@ -7,23 +7,6 @@ os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
 
 
-class TestIsInternational:
-    def test_empty_string(self):
-        assert is_international("") == 0
-
-    def test_contain_inter_uppercase(self):
-        assert is_international("INTER") == 1
-
-    def test_contain_inter_lowercase(self):
-        assert is_international("inter") == 1
-
-    def test_contain_inter_camelcase(self):
-        assert is_international("inter") == 1
-
-    def test_without_international(self):
-        assert is_international("abc") == 0
-
-
 class TestMergeAirport:
     @classmethod
     def setup_class(cls):
@@ -53,3 +36,21 @@ class TestMergeAirport:
         with pytest.raises(KeyError):
             merge_one_airport(self.raw_data, self.airports.drop(
                 "IATA_CODE", axis=1), "ORIGIN")
+
+
+class TestIsInternational:
+    def test_empty_string(self):
+        assert is_international("") == 0
+
+    def test_contain_inter_uppercase(self):
+        assert is_international("INTER") == 1
+
+    def test_contain_inter_lowercase(self):
+        assert is_international("inter") == 1
+
+    def test_contain_inter_camelcase(self):
+        assert is_international("inter") == 1
+
+    def test_without_international(self):
+        assert is_international("abc") == 0
+
