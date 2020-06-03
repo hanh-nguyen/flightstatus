@@ -1,4 +1,5 @@
 import pandas as pd
+from keras.utils.np_utils import to_categorical
 
 
 def search_result(searchcv):
@@ -10,3 +11,7 @@ def search_result(searchcv):
 
 def create_xy(data):
     return data.drop(['TARGET'], axis=1), data['TARGET']
+
+
+def transform_xy(data):
+    return (data.drop(['TARGET'], axis=1)).as_matrix(), to_categorical(data['TARGET'])
