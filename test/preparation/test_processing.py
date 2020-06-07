@@ -1,7 +1,8 @@
+from preparation import is_international, merge_one_airport
 import pytest
 import pandas as pd
 import os
-from preparation import is_international, merge_one_airport
+
 
 os.chdir(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 COLTYPES = {"ORIGIN_AIRPORT": object, "DESTINATION_AIRPORT": object}
