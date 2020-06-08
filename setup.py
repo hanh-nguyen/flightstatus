@@ -6,4 +6,4 @@ setup(name='flightstatus',
       author_email='myhanh.nguyen1211@gmail.com',
       packages=find_packages("dev"),
       package_dir={"": "dev"},
-      install_requires=['pandas'])
+      install_requires=['pandas', 'numpy', 'sklearn'])
