@@ -1,5 +1,5 @@
 import pandas as pd
-from datapreparation import *
+from .processing_helper import *
 import os
 from sklearn.feature_selection import VarianceThreshold
 from pandas.api.types import is_string_dtype, is_numeric_dtype
@@ -16,7 +16,7 @@ UNAVAILABLE = ['ARRIVAL_TIME', 'ARRIVAL_DELAY', 'DIVERTED', 'CANCELLED', 'CANCEL
                'ELAPSED_TIME', 'AIR_TIME', 'WHEELS_ON', 'TAXI_IN']
 DUP_COLS = ['AIRPORT_ORIGIN', 'AIRPORT_DESTINATION']
 EXTRA = ['DATE']
-flights = pd.read_csv("./data/dev/flights.csv", dtype=COLTYPES)
+flights = pd.read_csv("./data/flights.csv", dtype=COLTYPES)
 # remove ineligible airport codes
 for airport in AIRPORTS:
     flights = flights[flights[airport].str.isalpha()]
@@ -85,4 +85,4 @@ NUM_VAR_REMOVED = [NUM_VAR_COMPLETE[i] for i in range(
     len(NUM_VAR_COMPLETE)) if selector.get_support()[i] == False]
 flights.drop(NUM_VAR_REMOVED, axis=1, inplace=True)
 
-flights.to_csv("./data/dev/flights_processed.csv", index=False)
+flights.to_csv("./data/flights_processed.csv", index=False)
