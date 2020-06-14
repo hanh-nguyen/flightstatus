@@ -1,18 +1,45 @@
-# flightstatus
+## Flight Status
+*Which airline should you fly on to avoid significant delays?*
 
-The flight delay and cancellation data was collected and published by the DOT's Bureau of Transportation Statistics. Go to https://www.kaggle.com/usdot/flight-delays to download the data.
+---
 
-I built different models to predict flight cancelation and delay (more than 15 minutes).
-- XGBoost: run random search and grid search for hyperparameter tuning
-- Neural Network: experiment with different architectures, use dropout for regularization.
+### The Predictive Models
 
-I also created a portable package. To install the package, first clone the repo and run:
+I built different models to predict flight cancelation and delay (more than 15 minutes) based on airline and travel route.
 
-    pip install .
+* XGBoost: run random search and grid search for hyperparameter tuning
+* Neural Network: experiment with different architectures, use dropout for regularization.
 
+To reproduce the models, follow the [Instructions](#instructions) section.
 
-A unit test suite with Pytest has been developed. To run the tests:
+### The Data
 
-    cd test
-    pytest
+The flight delay and cancellation data was collected and published by the US Department of Transportation - Bureau of Transportation Statistics, and made publicly available on [Kaggle](https://www.kaggle.com/usdot/flight-delays).
 
+### Instructions
+
+* Clone the repository
+
+``` shell
+git clone https://github.com/hanh-nguyen/flightstatus
+cd flightstatus
+```
+
+* Download the data from [Kaggle](https://www.kaggle.com/usdot/flight-delays) and save to
+
+```
+./data
+```
+
+* Install dependencies
+
+``` shell
+python -m pip install requirements.txt
+```
+
+* Run unit tests
+
+``` shell
+cd test
+pytest
+```
