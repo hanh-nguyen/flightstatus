@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 from keras.utils.np_utils import to_categorical
-from sklearn.metrics import classification_report, SCORERS, roc_curve, auc
+from sklearn.metrics import classification_report, SCORERS, roc_curve, auc, precision_recall_curve, make_scorer
 import matplotlib.pyplot as plt
 
 
@@ -43,3 +43,20 @@ def optimize_threshold(y_actual, y_pred):
     opt_idx = np.argmin(np.sqrt(np.square(1-tpr) + np.square(fpr)))
     opt_threshold = thresholds[opt_idx]
     return opt_threshold
+
+
+def get_important_feature(features, scores):
+    return pd.DataFrame({'feature': features, 'importance_score': scores}).sort_values('importance_score', ascending=False)
+
+
+def pr_auc_score(y_true, y_score):
+    """
+    Generates the Area Under the Curve for precision and recall.
+    """
+    precision, recall, thresholds = precision_recall_curve(
+        y_true, y_score[:, 1])
+    return auc(recall, precision, reorder=True)
+
+
+pr_auc_scorer = make_scorer(
+    pr_auc_score, greater_is_better=True, needs_proba=True)
