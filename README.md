@@ -34,7 +34,7 @@ I built different models to predict flight cancelation and delays (more than 15 
 
 Both XGBoost and Neural Network models do not perform as well as the baseline model. Having said that, a predictive model allows us to get the probability prediction if we are considering two flight options and want to pick the one with higher likelihood of being on-time. The top features selected are the scheduled departure time, airline, and flight length. Flight delays and cancellations have several causes: weather, security, late aircraft, etc. Therefore, I will need to gather more useful information for the next round of modeling.
 
-|            |  PR-AUC  |         |                |
+|   PR-AUC   |          |         |                |
 | :--------: | :------: | :-----: | :------------: |
 |            | Baseline | XGBoost | Neural Network |
 |   Train    |   0.68   |  0.54   |      0.48      |
