@@ -29,8 +29,8 @@ I decided to use Precision-Recall Area Under a Curve (PR-AUC) for model evaluati
 
 I built different models to predict flight cancelation and delays (more than 15 minutes) based on airlines and travel routes. A baseline model (predicting all flights are delayed or cancelled) is also used for comparison.
 
-* XGBoost: run random search and grid search for hyperparameter tuning
-* Neural Network: experiment with different architectures, use dropout for regularization.
+* __XGBoost__: I run random search and grid search for hyperparameter tuning, including `max_depth`, `min_child_weight`, `subsample`, `colsample_bytree`, `learning_rate`. `scale_pos_weight` was set at 1.9 to reflect the negative and positive class ratio. Precision-Recall Area Under a Curve (PR-AUC) was used when fitting the model (`eval_metric = 'aucpr'` as well as tuning hyperparameters (`scoring = 'average_precision'`) 
+* __Neural Network__: I experimented with different architectures and used dropout rate of 0.8 for regularization.
 
 Both XGBoost and Neural Network models do not perform as well as the baseline model. Having said that, a predictive model allows us to get the probability prediction if we are considering two flight options and want to pick the one with higher likelihood of being on-time. The top features selected are the scheduled departure time, airline, and flight length. Flight delays and cancellations have several causes: weather, security, late aircraft, etc. Therefore, I will need to gather more useful information for the next round of modeling.
 
