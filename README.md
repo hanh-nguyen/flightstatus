@@ -11,7 +11,7 @@ The data processing steps were put into a reproducible analytical toolkit. A uni
 
 ### The performance metrics
 
-I wanted to predict flight cancelation and delays (more than 15 minutes). Three factors were taken into consideration:
+I wanted to predict flight cancelations and delays (more than 15 minutes). Three factors were taken into consideration:
 - This is a classification problem and we are intesterested in probabilities. When considering two or more flight options, knowing the ranking will allow us to pick the option with the highest likelihood of being on-time.
 - The dataset is slightly imbalanced (35% of the data are of the positive class).
 - The false negative results are more important than the false positive results--it is more costly to predict a delayed or cancelled flight incorrectly compared to predicting an on-time flight incorrectly.
@@ -21,7 +21,7 @@ I decided to use ROC and Precision-Recall Curve (PRC) for model evaluation.
 
 ### The Predictive Models
 
-I built different models to predict flight cancelation and delays (more than 15 minutes) based on airlines and travel routes. A dummy classifier model (`sklearn.dummy`) was used for comparison.
+I built different models to predict flight cancelations and delays (more than 15 minutes) based on airlines and travel routes. A dummy classifier model (`sklearn.dummy`) was used for comparison.
 
 * __XGBoost__: I ran random search and grid search for hyperparameter tuning, including `max_depth`, `min_child_weight`, `subsample`, `colsample_bytree`, and `learning_rate`. The `scale_pos_weight` was set at 1.9 to reflect the negative and positive class ratio. Precision-Recall Area Under a Curve (PR-AUC) was used when fitting the model (`eval_metric = 'aucpr'`) as well as tuning hyperparameters (`scoring = 'average_precision'`) 
 * __Neural Network__: I experimented with different architectures by starting with a small network and gradually increasing the model capacity until the validation score was no longer improving (PR-AUC). The models include fully connected hidden layers, a dropout layer to reduce overfitting, and an output softmax layer. Similar to XGBoost's `early_stopping_round` and `scale_pos_weight`, I set up an early stopping monitor `EarlyStopping(patience=5)` and `class_weight={0:1., 1:1.9}`.
