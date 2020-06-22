@@ -17,7 +17,7 @@ def create_xy(data):
 
 
 def transform_xy(data):
-    return (data.drop(['TARGET'], axis=1)).as_matrix(), to_categorical(data['TARGET'])
+    return (data.drop(['TARGET'], axis=1)).to_numpy(), to_categorical(data['TARGET'])
 
 
 def get_roc(y_actual, y_pred, plotting=False):
