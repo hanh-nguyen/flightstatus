@@ -26,7 +26,8 @@ I built different models to predict flight cancelations and delays (more than 15
 * __XGBoost__: I ran random search and grid search for hyperparameter tuning, including `max_depth`, `min_child_weight`, `subsample`, `colsample_bytree`, and `learning_rate`. The `scale_pos_weight` was set at 1.9 to reflect the negative and positive class ratio. Precision-Recall Area Under a Curve (PR-AUC) was used when fitting the model (`eval_metric = 'aucpr'`) as well as tuning hyperparameters (`scoring = 'average_precision'`) 
 * __Neural Network__: I experimented with different architectures by starting with a small network and gradually increasing the model capacity until the validation score was no longer improving (PR-AUC). The models include fully connected hidden layers, a dropout layer to reduce overfitting, and an output softmax layer. Similar to XGBoost's `early_stopping_round` and `scale_pos_weight`, I set up an early stopping monitor `EarlyStopping(patience=5)` and `class_weight={0:1., 1:1.9}`.
 
-I also tried two approaches for splitting the train-validation-test data. The first approach was splitting by months of the year: from January to June for training, from July to September for validation, and October to December for testing. The second approach was randomly splitting using `train_test_split` with `stratify` from `sklearn`. The second approach resulted in higher model performance (10%), potentially because the trained model could learn some seasonal patterns throughout the whole year in the train and validation sets.
+I tried two approaches for splitting the train-validation-test data. The first approach was splitting by months of the year: from January to June for training, from July to September for validation, and October to December for testing. The second approach was randomly splitting using `train_test_split` with `stratify` from `sklearn`. The second approach resulted in higher model performance (10%), potentially because the trained model could learn some seasonal patterns throughout the whole year in the train and validation sets.  
+I also tried Synthetic Minority Oversampling Technique `imblearn.over_sampling.SMOTE` but it did not help improving the performance further.
 
 Both XGBoost and Neural Network models performed better than the dummy model. 
 
@@ -44,7 +45,12 @@ Both XGBoost and Neural Network models performed better than the dummy model.
 | Validation |   0.46   |  0.59   |      0.47      |
 |    Test    |   0.46   |  0.59   |      0.50      |
 
-The top features selected are the scheduled arrival time, airline, month of the year, and flight distance. Flight delays and cancellations have several causes: weather, security, late aircraft, etc. Therefore, in order to improve the model's performance, we would need to collect more extensive information.
+### Interpreting the model
+I run partial dependence plots for the top features. Partial dependence plots show how a feature affects predictions. The plots show that:
+- given other features are the same, flights with scheduled arrival around 7-10 in the morning will have the highest likelihood of being on-time while arrving around midnight will have the highest likelihood of serious delay or cancellation.
+- given other features are the same, flights during September-November will have the highest likelihood of being on-time while flights in December and February tend to be delayed or cancelled.
+
+Flight delays and cancellations have several causes: weather, security, late aircraft, etc. Therefore, in order to improve the model's performance, we would need to collect more extensive information.
 
 To reproduce the models, follow the [Instructions](#instructions) section. 
 
