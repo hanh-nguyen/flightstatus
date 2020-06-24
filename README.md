@@ -45,10 +45,10 @@ Both XGBoost and Neural Network models performed better than the dummy model.
 | Validation |   0.46   |  0.59   |      0.47      |
 |    Test    |   0.46   |  0.59   |      0.50      |
 
-### Interpreting the model
-I run partial dependence plots for the top features. Partial dependence plots show how a feature affects predictions. The plots show that:
-- given other features are the same, flights with scheduled arrival around 7-10 in the morning will have the highest likelihood of being on-time while arrving around midnight will have the highest likelihood of serious delay or cancellation.
-- given other features are the same, flights during September-November will have the highest likelihood of being on-time while flights in December and February tend to be delayed or cancelled.
+### Model interpretation
+In order to understand how a specific feature affects predictions, I analyzed partial dependence plots for the top features. The following can be observed from the plots:
+- Given that other features are the same, flights with a scheduled arrival time between 7am-10am have the highest likelihood of being on-time, while flights with an arrival time close to midnight have the highest likelihood of serious delay or cancellation.
+- Given that other features are the same, flights inclusive of September-November have the highest likelihood of being on-time, while flights in December and February, specifically, have the highest likelihood of being delayed or cancelled.
 
 Flight delays and cancellations have several causes: weather, security, late aircraft, etc. Therefore, in order to improve the model's performance, we would need to collect more extensive information.
 
